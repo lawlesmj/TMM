@@ -1,4 +1,8 @@
 // includes
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <fstream>          /* makes file input a thing*/
 
 //Structures
 //Matrix structure
@@ -18,7 +22,10 @@ typedef struct {
 void *matMult( void *param );
 
 int main(int argc, string argv[]) {
+    
 }
 
 void *matMult( void *param ) {
 }
+
+void matIntake()
