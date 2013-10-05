@@ -15,10 +15,10 @@ Submitted on: ?
 -------------------------------------------------------------------------------*/
 
 // includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <fstream>          /* makes file input a thing*/
+#include <stdio.h>          /* lets me play with files */
+#include <stdlib.h>         /* adds useful system functions */
+#include <pthread.h>        /* lets us play with threads */
+#include <fstream>          /* makes file input a thing */
 
 //Structures
 //Matrix structure
