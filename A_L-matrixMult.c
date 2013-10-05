@@ -44,4 +44,15 @@ int main(int argc, string argv[]) {
 void *matMult( void *param ) {
 }
 
-void matIntake()
+void matIntake(){
+    //create matrix struct
+    //loop1 while there is still info in the file
+        //read first two numbers i and j
+        //loop2 for i 
+            //loop3 for j
+                //store stuff in matrix struct
+    //end loop 1
+    
+    //now should we read this a byte at a time or should we read them in as ints?
+            
+}
