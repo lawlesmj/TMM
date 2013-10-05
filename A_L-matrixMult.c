@@ -18,7 +18,6 @@ Submitted on: ?
 #include <stdio.h>          /* lets me play with files */
 #include <stdlib.h>         /* adds useful system functions */
 #include <pthread.h>        /* lets us play with threads */
-#include <fstream>          /* makes file input a thing */
 
 //Structures
 //Matrix structure
