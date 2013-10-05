@@ -1,3 +1,19 @@
+/*-------------------------------------------------------------------------------
+
+CS-450  Fall 2013
+
+Programming Assignment #1: Matrix Multiplication using Multithreading
+
+Written By: Team-Applegate_Lawless
+
+1- Michael Lawless
+
+2- Douglas Applegate
+
+Submitted on: ?
+
+-------------------------------------------------------------------------------*/
+
 // includes
 #include <stdio.h>
 #include <stdlib.h>
