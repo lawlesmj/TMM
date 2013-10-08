@@ -35,6 +35,8 @@ typedef struct {
 
 //thread function prototype
 void *matMult( void *param );
+//File read function prototype
+void matIntake(matrix_t * firstMat, matrix_t * secMat, String fileName);
 
 int main(int argc, string argv[]) {
     matrix_t * matrix1;
