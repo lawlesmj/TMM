@@ -58,13 +58,18 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, String fileName){
         return 1;
     }
    
-    //loop1 while there is still info in the file
-        //read first two numbers i and j
-        //loop2 for i 
-            //loop3 for j
+    //read first two numbers i and j for first matrix
+        //loop1 for i 
+            //loop2 for j
                 //store stuff in matrix struct
     //end loop 1
     
-    //now should we read this a byte at a time or should we read them in as ints?
+    //read two numbers i and j for second matrix
+        //loop1 for i 
+            //loop2 for j
+                //store stuff in matrix struct
+    //end loop 1
+    
+    //read as ints
             
 }
