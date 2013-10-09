@@ -35,6 +35,8 @@ typedef struct {
 typedef struct {
 	uint row;
 	uint col;
+	matrix_t *leftMat;
+	matrix_t *rightMat;
 } pos_t;
 
 //thread function prototype
@@ -43,10 +45,36 @@ void *matMult( void *param );
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
 int main(int argc, string argv[]) {
-	matrix_t * matrix1;
-	matrix_t * matrix2;
-	matIntake(&matrix1, &matrix2);
-	//stuff
+	unsigned int i,j;
+	pos_t * params;
+	matrix_t * leftMat;
+	matrix_t * rightMat;
+	
+	
+	matIntake(&leftMat, &rightMat);
+	//print Matrices
+	
+	//allocate array of thread params
+	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
+	
+	if(params == NULL) {
+		//bad shit happened
+		printf("Out of memory. Could not allocate thread param array.");
+		//clean up
+		free(leftMat);
+		free(rightMat);
+		exit(1);
+	}
+	
+	for(i=0; i < leftMat->rows; i++) {
+		for(j=o; j < rightMat->cols; j++) {
+			//make thread param in params array
+			//run thread with param
+		}
+	}
+	
+	//wait for threads to complete
+	//print output
 }
 
 void *matMult( void *param ) {
@@ -94,6 +122,8 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 	if(secMat->array == NULL) {
 		//bad shit happened
 		printf("Out of memory. Could not allocate Matrix.");
+		//clean up
+		free(firstMat);
 		exit(1); 
 	}
 	
