@@ -78,6 +78,9 @@ int main(int argc, string argv[]) {
 }
 
 void *matMult( void *param ) {
+	// hey now that I'm thinkinh about this this just might be the thing the threads use
+	//to multiply the matrix I think that it would be possible to set everything up in main
+	// in a reasoable fashion.
 }
 
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
