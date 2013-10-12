@@ -49,9 +49,11 @@ int main(int argc, string argv[]) {
 	pos_t * params;
 	matrix_t * leftMat;
 	matrix_t * rightMat;
+	pthread_t threads[];//We may need to intialize this after we take in matrix info
 	
 	
 	matIntake(&leftMat, &rightMat);
+	//pthread_t threads[(leftMat -> rows) * (rightMat -> col];
 	//print Matrices
 	
 	//allocate array of thread params
