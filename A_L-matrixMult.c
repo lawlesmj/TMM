@@ -49,7 +49,7 @@ int main(int argc, string argv[]) {
 	pos_t * params;
 	matrix_t * leftMat;
 	matrix_t * rightMat;
-	pthread_t threads[];//We may need to intialize this after we take in matrix info
+	pthread_t threads[];
 	pthread_attr_t thread attrs[];
 	
 	
@@ -57,14 +57,11 @@ int main(int argc, string argv[]) {
 	
 	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
 	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col))];
-	//initializing attrs
-	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
-		pthread_attr_init(&attrs[i]);
-	}
 	
 	//we are going to need a thread for every cell of the matrix if I figured this right
 	//print Matrices
 	//Matrix 1 (left)
+	printf("d% X d%", leftMat->row, leftMat->col);
 	for(i = 0; i < leftMat -> row; i++;){
 		for(j = 0; j < leftMat -> col; j++;){
 			printf("[d%] ", MATRIX(leftMat,row,col));
@@ -72,7 +69,10 @@ int main(int argc, string argv[]) {
 		printf("\n");
 	}
 	
+	printf("\n");
+	
 	//rightMat
+	printf("d% X d%", rightMat->row, rightMat->col);
 	for(i = 0; i < rightMat -> row; i++;){
 		for(j = 0; j < rightMat -> col; j++;){
 			printf("[d%] ", MATRIX(rightMat,row,col));
@@ -81,8 +81,6 @@ int main(int argc, string argv[]) {
 	}
 	
 	//allocate array of thread params
-	//hey didn't he make a comment about how he prefered new/del rather than malloc?
-	// I personally prefer malloc but I think he did make a comment about it
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
 	if(params == NULL) {
@@ -93,6 +91,13 @@ int main(int argc, string argv[]) {
 		free(rightMat);
 		exit(1);
 	}
+	
+	//initializing attrs
+	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
+		pthread_attr_init(&attrs[i]);
+	}
+	
+	k=0;
 	
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=o; j < rightMat->cols; j++) {
