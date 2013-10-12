@@ -99,15 +99,30 @@ int main(int argc, string argv[]) {
 	
 	k=0;
 	
+	//create the threads
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=o; j < rightMat->cols; j++) {
+			pthread_create(&threads[k],attrs[k], &matMult(), NULL);
 			//make thread param in params array
 			//why? I don't follow your logic.
 			//run thread with param
+			k = k + 1;
 		}
 	}
 	
 	//wait for threads to complete
+	//join the threads
+	k = 0;
+	
+	for(i=0; i < leftMat->rows; i++) {
+		for(j=o; j < rightMat->cols; j++) {
+			pthread_join(&threads[k], NULL);
+			//make thread param in params array
+			//why? I don't follow your logic.
+			//run thread with param
+			k = k + 1;
+		}
+	}
 	//print output
 }
 
