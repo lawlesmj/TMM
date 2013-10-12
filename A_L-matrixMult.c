@@ -50,10 +50,18 @@ int main(int argc, string argv[]) {
 	matrix_t * leftMat;
 	matrix_t * rightMat;
 	pthread_t threads[];//We may need to intialize this after we take in matrix info
+	pthread_attr_t thread attrs[];
 	
 	
 	matIntake(&leftMat, &rightMat);
-	//pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
+	
+	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
+	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col))];
+	//initializing attrs
+	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
+		pthread_attr_init(&attrs[i]);
+	}
+	
 	//we are going to need a thread for every cell of the matrix if I figured this right
 	//print Matrices
 	//Matrix 1 (left)
