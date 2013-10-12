@@ -53,8 +53,16 @@ int main(int argc, string argv[]) {
 	
 	
 	matIntake(&leftMat, &rightMat);
-	//pthread_t threads[(leftMat -> rows) * (rightMat -> col];
+	//pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
+	//we are going to need a thread for every cell of the matrix if I figured this right
 	//print Matrices
+	//Matrix 1 (left)
+	for(i = 0; i < leftMat -> row; i++;){
+		for(j = 0; j < leftMat -> col; j++;){
+			printf("[d%] ", MATRIX(matrix,row,col));
+		}
+		printf("\n");
+	}
 	
 	//allocate array of thread params
 	//hey didn't he make a comment about how he prefered new/del rather than malloc?
