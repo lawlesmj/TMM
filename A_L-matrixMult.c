@@ -55,10 +55,12 @@ int main(int argc, string argv[]) {
 	//print Matrices
 	
 	//allocate array of thread params
+	//hey didn't he make a comment about how he prefered new/del rather than malloc?
+	// I personally prefer malloc but I think he did make a comment about it
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
 	if(params == NULL) {
-		//bad shit happened
+		//bad things happened
 		printf("Out of memory. Could not allocate thread param array.");
 		//clean up
 		free(leftMat);
