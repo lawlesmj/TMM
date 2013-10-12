@@ -45,7 +45,7 @@ void *matMult( void *param );
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
 int main(int argc, string argv[]) {
-	unsigned int i,j;
+	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
 	matrix_t * leftMat;
 	matrix_t * rightMat;
@@ -67,7 +67,15 @@ int main(int argc, string argv[]) {
 	//Matrix 1 (left)
 	for(i = 0; i < leftMat -> row; i++;){
 		for(j = 0; j < leftMat -> col; j++;){
-			printf("[d%] ", MATRIX(matrix,row,col));
+			printf("[d%] ", MATRIX(leftMat,row,col));
+		}
+		printf("\n");
+	}
+	
+	//rightMat
+	for(i = 0; i < rightMat -> row; i++;){
+		for(j = 0; j < rightMat -> col; j++;){
+			printf("[d%] ", MATRIX(rightMat,row,col));
 		}
 		printf("\n");
 	}
