@@ -63,8 +63,8 @@ int main(int argc, string argv[]) {
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
 	//setup params
-	params->row = leftMat->row;
-	params->col = rightMat->col;
+	params->row = 0;
+	params->col = 0;
 	params->leftMatrix =  *leftMat;
 	params->rightMatrix = *rightMat;
 	
@@ -110,6 +110,8 @@ int main(int argc, string argv[]) {
 	//create the threads
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=0; j < rightMat->cols; j++) {
+			params->row = i;
+			params->col = j;
 			pthread_create(&threads[k],attrs[k], &matMult(), NULL);
 			//make thread param in params array
 			//why? I don't follow your logic.
