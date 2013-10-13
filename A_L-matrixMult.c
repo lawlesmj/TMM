@@ -65,30 +65,8 @@ int main(int argc, string argv[]) {
 	//setup params
 	params->row = 0;
 	params->col = 0;
-	params->leftMatrix =  *leftMat;
-	params->rightMatrix = *rightMat;
-	
-	//print Matrices
-	//Matrix 1 (left)
-	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
-	for(i = 0; i < leftMat -> row; i++;){
-		for(j = 0; j < leftMat -> col; j++;){
-			printf("[d%] ", MATRIX(leftMat,leftMat->row,leftMat->col));
-			//Is there a way to tell if these things join correctly?
-		}
-		printf("\n ");
-	}
-	
-	printf("\n");
-	
-	//rightMat
-	printf("Matrix 2 [d%] X [d%]\n ", rightMat->row, rightMat->col);
-	for(i = 0; i < rightMat -> row; i++;){
-		for(j = 0; j < rightMat -> col; j++;){
-			printf("[d%] ", MATRIX(rightMat,rightMat->row,rightMat->col));
-		}
-		printf("\n ");
-	}
+	params->leftMatrix = &leftMat;
+	params->rightMatrix = &rightMat;
 	
 	if(params == NULL) {
 		//bad things happened
@@ -104,6 +82,27 @@ int main(int argc, string argv[]) {
 		pthread_attr_init(&attrs[i]);
 	}
 	
+	//print Matrices
+	//Matrix 1 (left)
+	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
+	for(i = 0; i < leftMat -> row; i++;){
+		for(j = 0; j < leftMat -> col; j++;){
+			printf("[d%] ", MATRIX(leftMat,leftMat->row,leftMat->col));
+			
+		}
+		printf("\n ");
+	}
+	
+	printf("\n");
+	
+	//rightMat
+	printf("Matrix 2 [d%] X [d%]\n ", rightMat->row, rightMat->col);
+	for(i = 0; i < rightMat -> row; i++;){
+		for(j = 0; j < rightMat -> col; j++;){
+			printf("[d%] ", MATRIX(rightMat,rightMat->row,rightMat->col));
+		}
+		printf("\n ");
+	}
 	
 	k=0;
 	
@@ -127,6 +126,7 @@ int main(int argc, string argv[]) {
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=0; j < rightMat->cols; j++) {
 			pthread_join(&threads[k], NULL);
+			
 			k = k + 1;
 		}
 	}
