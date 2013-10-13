@@ -55,10 +55,16 @@ int main(int argc, string argv[]) {
 	
 	matIntake(&leftMat, &rightMat);
 	
-	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
-	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col))];
-	
 	//we are going to need a thread for every cell of the matrix if I figured this right
+	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
+	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col);
+	
+	//setup params
+	params->row = leftMat->row;
+	params->col = rightMat->col;
+	params->leftMatrix =  *leftMat;
+	params->rightMatrix = *rightMat;
+	
 	//print Matrices
 	//Matrix 1 (left)
 	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
@@ -96,12 +102,6 @@ int main(int argc, string argv[]) {
 	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
 		pthread_attr_init(&attrs[i]);
 	}
-	
-	//setup params
-	params->row = leftMat->row;
-	params->col = rightMat->col;
-	params->leftMatrix =  *leftMat;
-	params->rightMatrix = *rightMat;
 	
 	
 	k=0;
