@@ -117,9 +117,6 @@ int main(int argc, string argv[]) {
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=0; j < rightMat->cols; j++) {
 			pthread_join(&threads[k], NULL);
-			//make thread param in params array
-			//why? I don't follow your logic.
-			//run thread with param
 			k = k + 1;
 		}
 	}
@@ -129,7 +126,7 @@ int main(int argc, string argv[]) {
 void *matMult( void *param ) {
 	// hey now that I'm thinkinh about this this just might be the thing the threads use
 	//to multiply the matrix I think that it would be possible to set everything up in main
-	// in a reasoable fashion.
+	// in a reasonable fashion.
 }
 
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
