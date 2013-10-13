@@ -64,7 +64,7 @@ int main(int argc, string argv[]) {
 	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
 	for(i = 0; i < leftMat -> row; i++;){
 		for(j = 0; j < leftMat -> col; j++;){
-			printf("[d%] ", MATRIX(leftMat,row,col));
+			printf("[d%] ", MATRIX(leftMat,leftMat->row,leftMat->col));
 		}
 		printf("\n ");
 	}
@@ -75,7 +75,7 @@ int main(int argc, string argv[]) {
 	printf("Matrix 2 [d%] X [d%]\n ", rightMat->row, rightMat->col);
 	for(i = 0; i < rightMat -> row; i++;){
 		for(j = 0; j < rightMat -> col; j++;){
-			printf("[d%] ", MATRIX(rightMat,row,col));
+			printf("[d%] ", MATRIX(rightMat,rightMat->row,rightMat->col));
 		}
 		printf("\n ");
 	}
