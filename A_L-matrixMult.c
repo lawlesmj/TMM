@@ -71,6 +71,7 @@ int main(int argc, string argv[]) {
 	for(i = 0; i < leftMat -> row; i++;){
 		for(j = 0; j < leftMat -> col; j++;){
 			printf("[d%] ", MATRIX(leftMat,leftMat->row,leftMat->col));
+			//Is there a way to tell if these things join correctly?
 		}
 		printf("\n ");
 	}
