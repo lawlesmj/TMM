@@ -97,6 +97,9 @@ int main(int argc, string argv[]) {
 		pthread_attr_init(&attrs[i]);
 	}
 	
+	//setup params
+	
+	
 	k=0;
 	
 	//create the threads
@@ -169,7 +172,7 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 	secMat->array = (int*) malloc(sizeof(int) * secMat->rows * secMat->cols);
 	
 	if(secMat->array == NULL) {
-		//bad shit happened
+		//bad stuff happened
 		printf("Out of memory. Could not allocate Matrix.");
 		//clean up
 		free(firstMat);
