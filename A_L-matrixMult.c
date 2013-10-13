@@ -35,8 +35,8 @@ typedef struct {
 typedef struct {
 	uint row;
 	uint col;
-	matrix_t *leftMat;
-	matrix_t *rightMat;
+	matrix_t *leftMatrix;
+	matrix_t *rightMatrix;
 } pos_t;
 
 //thread function prototype
@@ -98,6 +98,10 @@ int main(int argc, string argv[]) {
 	}
 	
 	//setup params
+	params->row = leftMat->row;
+	params->col = rightMat->col;
+	params->leftMatrix =  *leftMat;
+	params->rightMatrix = *rightMat;
 	
 	
 	k=0;
