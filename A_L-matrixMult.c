@@ -59,6 +59,9 @@ int main(int argc, string argv[]) {
 	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
 	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col);
 	
+	//allocate array of thread params
+	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
+	
 	//setup params
 	params->row = leftMat->row;
 	params->col = rightMat->col;
@@ -86,9 +89,6 @@ int main(int argc, string argv[]) {
 		}
 		printf("\n ");
 	}
-	
-	//allocate array of thread params
-	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
 	if(params == NULL) {
 		//bad things happened
