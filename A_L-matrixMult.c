@@ -111,7 +111,7 @@ int main(int argc, string argv[]) {
 		for(j=0; j < rightMat->cols; j++) {
 			params->row = i;
 			params->col = j;
-			pthread_create(&threads[k],attrs[k], &matMult(), NULL);
+			pthread_create(&threads[k],attrs[k], &matMult(*params), NULL);
 			//make thread param in params array
 			//why? I don't follow your logic.
 			//run thread with param
