@@ -37,6 +37,7 @@ typedef struct {
 	uint col;
 	matrix_t *leftMatrix;
 	matrix_t *rightMatrix;
+	matrix_t *resultMatrix;
 } pos_t;
 
 //thread function prototype
@@ -49,11 +50,15 @@ int main(int argc, string argv[]) {
 	pos_t * params;
 	matrix_t * leftMat;
 	matrix_t * rightMat;
+	matrix_t *resultMat;
 	pthread_t threads[];
 	pthread_attr_t thread attrs[];
 	
 	
 	matIntake(&leftMat, &rightMat);
+	//prep result matrix
+	resultMat->row = leftMat->row;
+	resultMat->col = rightMat->col;
 	
 	//we are going to need a thread for every cell of the matrix if I figured this right
 	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
