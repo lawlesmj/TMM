@@ -61,23 +61,23 @@ int main(int argc, string argv[]) {
 	//we are going to need a thread for every cell of the matrix if I figured this right
 	//print Matrices
 	//Matrix 1 (left)
-	printf("d% X d%", leftMat->row, leftMat->col);
+	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
 	for(i = 0; i < leftMat -> row; i++;){
 		for(j = 0; j < leftMat -> col; j++;){
 			printf("[d%] ", MATRIX(leftMat,row,col));
 		}
-		printf("\n");
+		printf("\n ");
 	}
 	
 	printf("\n");
 	
 	//rightMat
-	printf("d% X d%", rightMat->row, rightMat->col);
+	printf("Matrix 2 [d%] X [d%]\n ", rightMat->row, rightMat->col);
 	for(i = 0; i < rightMat -> row; i++;){
 		for(j = 0; j < rightMat -> col; j++;){
 			printf("[d%] ", MATRIX(rightMat,row,col));
 		}
-		printf("\n");
+		printf("\n ");
 	}
 	
 	//allocate array of thread params
@@ -101,7 +101,7 @@ int main(int argc, string argv[]) {
 	
 	//create the threads
 	for(i=0; i < leftMat->rows; i++) {
-		for(j=o; j < rightMat->cols; j++) {
+		for(j=0; j < rightMat->cols; j++) {
 			pthread_create(&threads[k],attrs[k], &matMult(), NULL);
 			//make thread param in params array
 			//why? I don't follow your logic.
@@ -115,7 +115,7 @@ int main(int argc, string argv[]) {
 	k = 0;
 	
 	for(i=0; i < leftMat->rows; i++) {
-		for(j=o; j < rightMat->cols; j++) {
+		for(j=0; j < rightMat->cols; j++) {
 			pthread_join(&threads[k], NULL);
 			//make thread param in params array
 			//why? I don't follow your logic.
