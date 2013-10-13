@@ -45,6 +45,9 @@ void *matMult( void *param );
 //File read function prototype
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
+//mutex!
+pthread_mutex_t deadBolt;
+
 int main(int argc, string argv[]) {
 	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
@@ -53,7 +56,6 @@ int main(int argc, string argv[]) {
 	matrix_t *resultMat;
 	pthread_t threads[];
 	pthread_attr_t thread attrs[];
-	
 	
 	matIntake(&leftMat, &rightMat);
 	//prep result matrix
@@ -64,6 +66,12 @@ int main(int argc, string argv[]) {
 	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
 	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col);
 	
+	//init mutex
+	if (pthread_mutex_init(&deadBolt, NULL) != 0){
+		printf("Mutex intialization has failed");
+		exit(1);
+	}
+	
 	//allocate array of thread params
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
@@ -72,6 +80,7 @@ int main(int argc, string argv[]) {
 	params->col = 0;
 	params->leftMatrix = &leftMat;
 	params->rightMatrix = &rightMat;
+	params->resultMatrix = &resultMat;
 	
 	if(params == NULL) {
 		//bad things happened
@@ -142,6 +151,9 @@ void *matMult( void *param ) {
 	// hey now that I'm thinkinh about this this just might be the thing the threads use
 	//to multiply the matrix I think that it would be possible to set everything up in main
 	// in a reasonable fashion.
+	pthread_mutex_lock(&deadBolt);
+	
+	pthread_mutex_unlock(&deadBolt);
 }
 
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
