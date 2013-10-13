@@ -45,7 +45,7 @@ void *matMult( void *param );
 //File read function prototype
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
-//mutex!
+//mutex! for good measure
 pthread_mutex_t deadBolt;
 
 int main(int argc, string argv[]) {
