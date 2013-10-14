@@ -53,6 +53,7 @@ matrix_t * resultMat;
 int main(int argc, char * argv[]) {
 	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
+	pthreads_t *threads
 	
 	pthread_t threads[];
 	
@@ -69,8 +70,29 @@ int main(int argc, char * argv[]) {
 	resultMat->row = leftMat->row;
 	resultMat->col = rightMat->col;
 	
+	resultMat->array = (int*) malloc(sizeof(int) * (resultMat -> rows) * (resultMat -> col));
+	
+	if(resultMat->array == NULL) {
+		//bad things happened
+		printf("Out of memory. Could not allocate result array.");
+		//clean up
+		free(leftMat);
+		free(rightMat);
+		exit(1);
+	}
+	
 	//we are going to need a thread for every cell of the matrix
-	pthread_t threads[(resultMat -> rows) * (resultMat -> col)];
+	threads = (pthreads_t *) malloc(sizeof(pthreads_t) * (resultMat -> rows) * (resultMat -> col));
+	
+	if(threads == NULL) {
+		//bad things happened
+		printf("Out of memory. Could not allocate threads array.");
+		//clean up
+		free(leftMat);
+		free(rightMat);
+		free(resultMat);
+		exit(1);
+	}
 	
 	//allocate array of thread params
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
@@ -82,10 +104,9 @@ int main(int argc, char * argv[]) {
 		free(leftMat);
 		free(rightMat);
 		free(resultMat);
+		free(threads);
 		exit(1);
 	}
-	
-	//setup params
 	
 	//print Matrices
 	//Matrix 1 (left)
@@ -114,28 +135,27 @@ int main(int argc, char * argv[]) {
 	//create the threads
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=0; j < rightMat->cols; j++) {
-			params->row = i;
-			params->col = j;
-			pthread_create(&threads[k],attrs[k], &matMult(*params), NULL);
-			//make thread param in params array
-			//why? I don't follow your logic.
-			//run thread with param
-			k = k + 1;
+			MATRIX(params, i, j)->row = i;
+			MATRIX(params, i, j)->col = j;
+			pthread_create(MATRIX(threads, i, j) ,NULL, &matMult, MATRIX(params, i, j));
 		}
 	}
 	
-	//wait for threads to complete
-	//join the threads
-	k = 0;
 	
 	for(i=0; i < leftMat->rows; i++) {
 		for(j=0; j < rightMat->cols; j++) {
-			pthread_join(&threads[k], NULL);
-			
-			k = k + 1;
+			pthread_join(MATRIX(threads, i, j), NULL);
 		}
 	}
 	//print output
+	
+	
+	//clean up at the end
+	free(leftMat);
+	free(rightMat);
+	free(resultMat);
+	free(threads);
+	free(params);
 }
 
 void *matMult( void *param ) {
