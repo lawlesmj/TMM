@@ -21,7 +21,7 @@ LFLAGS =
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
 #   option, something like (this will link in libmylib.so and libm.so:
-LIBS = -lpthreads
+LIBS = -lpthread
 
 # define the C source files
 SRCS = A_L-matrixMult.c
@@ -37,7 +37,7 @@ SRCS = A_L-matrixMult.c
 OBJS = $(SRCS:.c=.o)
 
 # define the executable file 
-MAIN = A_L-matrixMult
+MAIN = prog
 
 #
 # The following part of the makefile is generic; it can be used to 
@@ -50,14 +50,14 @@ MAIN = A_L-matrixMult
 all:    $(MAIN)
 
 $(MAIN): $(OBJS) 
-        $(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(MAIN) $(LFLAGS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
 # (see the gnu make manual section about automatic variables)
 .c.o:
-        $(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
-        $(RM) *.o *~ $(MAIN)
+	$(RM) *.o *~ $(MAIN)

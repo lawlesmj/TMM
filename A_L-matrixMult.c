@@ -21,20 +21,21 @@ Submitted on: 10/14/2013
                             //will need to complid with -lpthread
                             
 //A macro to emulate a 2d array. Works just like matrix[row][col].
-#define MATRIX(matrix, row, col) matrix->array[row + col * matrix->height]
+#define PMATRIX(matrix, row, col) matrix->array[row + col * matrix->height]
+#define MATRIX(matrix, row, col) matrix.array[row + col * matrix.height]
 
 //Structures
 //Matrix structure
 typedef struct {
-	uint height;
-	uint width;
+	unsigned int height;
+	unsigned int width;
 	int *array;
 } matrix_t;
 
 //thread param structure
 typedef struct {
-	uint row;
-	uint col;
+	unsigned int row;
+	unsigned int col;
 } pos_t;
 
 //thread function prototype
@@ -46,63 +47,63 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 pthread_mutex_t deadBolt;
 
 //globals
-matrix_t * leftMat;
-matrix_t * rightMat;
-matrix_t * resultMat;
+matrix_t leftMat;
+matrix_t rightMat;
+matrix_t resultMat;
 
 int main(int argc, char * argv[]) {
-	unsigned int i,j,k; // k is to manage the threads
+	unsigned int i,j;
 	pos_t * params;
-	pthreads_t * threads;
+	pthread_t * threads;
 	FILE * output;
 	
 	//init mutex
 	if (pthread_mutex_init(&deadBolt, NULL) != 0){
-		printf("Mutex intialization has failed");
+		printf("Mutex intialization has failed\n");
 		exit(1);
 	}
 	
 	//read in input file
-	matIntake(leftMat, rightMat, "input.dat");
+	matIntake(&leftMat, &rightMat, "input.dat");
 	
 	//prep result matrix
-	resultMat->row = leftMat->row;
-	resultMat->col = rightMat->col;
+	resultMat.height = leftMat.height;
+	resultMat.width = rightMat.width;
 	
-	resultMat->array = (int*) malloc(sizeof(int) * (resultMat -> height) * (resultMat -> col));
+	resultMat.array = (int*) malloc(sizeof(int) * (resultMat.height) * (resultMat.width));
 	
-	if(resultMat->array == NULL) {
+	if(resultMat.array == NULL) {
 		//bad things happened
-		printf("Out of memory. Could not allocate result array.");
+		printf("Out of memory. Could not allocate result array.\n");
 		//clean up
-		free(leftMat);
-		free(rightMat);
+		free(leftMat.array);
+		free(rightMat.array);
 		exit(1);
 	}
 	
 	//we are going to need a thread for every cell of the matrix
-	threads = (pthreads_t *) malloc(sizeof(pthreads_t) * (resultMat -> height) * (resultMat -> col));
+	threads = (pthread_t *) malloc(sizeof(pthread_t) * (resultMat . height) * (resultMat . width));
 	
 	if(threads == NULL) {
 		//bad things happened
-		printf("Out of memory. Could not allocate threads array.");
+		printf("Out of memory. Could not allocate threads array.\n");
 		//clean up
-		free(leftMat);
-		free(rightMat);
-		free(resultMat);
+		free(leftMat.array);
+		free(rightMat.array);
+		free(resultMat.array);
 		exit(1);
 	}
 	
 	//allocate array of thread params
-	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->height * rightMat->width);
+	params = (pos_t *) malloc(sizeof(pos_t) * leftMat.height * rightMat.width);
 	
 	if(params == NULL) {
 		//bad things happened
-		printf("Out of memory. Could not allocate thread param array.");
+		printf("Out of memory. Could not allocate thread param array.\n");
 		//clean up
-		free(leftMat);
-		free(rightMat);
-		free(resultMat);
+		free(leftMat.array);
+		free(rightMat.array);
+		free(resultMat.array);
 		free(threads);
 		exit(1);
 	}
@@ -112,11 +113,11 @@ int main(int argc, char * argv[]) {
 	
 	if( output == NULL)
 	{
-		printf("There is no file by the name %s Closing program", "output.dat");
+		printf("There is no file by the name %s Closing program\n", "output.dat");
 		//clean up
-		free(leftMat);
-		free(rightMat);
-		free(resultMat);
+		free(leftMat.array);
+		free(rightMat.array);
+		free(resultMat.array);
 		free(threads);
 		free(params);
 		exit(1);
@@ -124,12 +125,12 @@ int main(int argc, char * argv[]) {
 	
 	//print Matrices
 	//Matrix 1 (left)
-	printf("A[d%][d%] = {\n ", leftMat->height, leftMat->width);
-	fprintf(output, "A[d%][d%] = {\n ", leftMat->height, leftMat->width);
-	for(i = 0; i < leftMat -> height; i++;){
-		for(j = 0; j < leftMat -> width; j++;){
-			printf("\td%", MATRIX(leftMat,i,j));
-			fprintf(output, "\td%", MATRIX(leftMat,i,j));
+	printf("A[%d][%d] = {\n ", leftMat.height, leftMat.width);
+	fprintf(output, "A[%d][%d] = {\n ", leftMat.height, leftMat.width);
+	for(i = 0; i < leftMat . height; i++) {
+		for(j = 0; j < leftMat . width; j++){
+			printf("\t%d", MATRIX(leftMat,i,j));
+			fprintf(output, "\t%d", MATRIX(leftMat,i,j));
 		}
 		printf("\n");
 		fprintf(output, "\n");
@@ -137,13 +138,14 @@ int main(int argc, char * argv[]) {
 	printf("}\n\n");
 	fprintf(output, "}\n\n");
 	
-	//rightMat
-	printf("B[d%][d%] = {\n ", rightMat->height, rightMat->width);
-	fprintf(output, "B[d%][d%] = {\n ", rightMat->height, rightMat->width);
-	for(i = 0; i < rightMat -> height; i++;){
-		for(j = 0; j < rightMat -> width; j++;){
-			printf("\td%", MATRIX(rightMat,i,j));
-			fprintf(output, "\td%", MATRIX(rightMat,i,j));
+	//print Matrices
+	//Matrix 1 (right)
+	printf("B[%d][%d] = {\n ", rightMat.height, rightMat.width);
+	fprintf(output, "B[%d][%d] = {\n ", rightMat.height, rightMat.width);
+	for(i = 0; i < rightMat . height; i++) {
+		for(j = 0; j < rightMat . width; j++){
+			printf("\t%d", MATRIX(rightMat,i,j));
+			fprintf(output, "\t%d", MATRIX(rightMat,i,j));
 		}
 		printf("\n");
 		fprintf(output, "\n");
@@ -152,30 +154,31 @@ int main(int argc, char * argv[]) {
 	fprintf(output, "}\n\n");
 	
 	//create the threads
-	for(i=0; i < leftMat->height; i++) {
-		for(j=0; j < rightMat->width; j++) {
-			MATRIX(params, i, j)->row = i;
-			MATRIX(params, i, j)->col = j;
-			pthread_create(MATRIX(threads, i, j) ,NULL, &matMult, MATRIX(params, i, j));
+	for(i=0; i < leftMat.height; i++) {
+		for(j=0; j < rightMat.width; j++) {
+			params[i + j * resultMat.height].row = i;
+			params[i + j * resultMat.height].col = j;
+			pthread_create(&threads[i + j * resultMat.height], NULL,
+			 &matMult, &params[i + j * resultMat.height]);
 		}
 	}
 	
 	//wait for each thread to complete
-	for(i=0; i < leftMat->height; i++) {
-		for(j=0; j < rightMat->width; j++) {
-			pthread_join(MATRIX(threads, i, j), NULL);
+	for(i=0; i < resultMat.height; i++) {
+		for(j=0; j < resultMat.width; j++) {
+			pthread_join(threads[i + j * resultMat.height], NULL);
 		}
 	}
 	
 	printf("### ALL threads have terminated\n\n");
 	
 	//result matrix
-	printf("C[d%][d%] = {\n ", resultMat->height, resultMat->width);
-	fprintf(output, "C[d%][d%] = {\n ", resultMat->height, resultMat->width);
-	for(i = 0; i < resultMat -> height; i++;){
-		for(j = 0; j < resultMat -> width; j++;){
-			printf("\td%", MATRIX(resultMat,i,j));
-			fprintf(output, "\td%", MATRIX(resultMat,i,j));
+	printf("C[%d][%d] = {\n ", resultMat.height, resultMat.width);
+	fprintf(output, "C[%d][%d] = {\n ", resultMat.height, resultMat.width);
+	for(i = 0; i < resultMat . height; i++) {
+		for(j = 0; j < resultMat . width; j++){
+			printf("\t%d", MATRIX(resultMat,i,j));
+			fprintf(output, "\t%d", MATRIX(resultMat,i,j));
 		}
 		printf("\n");
 		fprintf(output, "\n");
@@ -184,52 +187,55 @@ int main(int argc, char * argv[]) {
 	fprintf(output, "}\n");
 	
 	//clean up at the end
-	free(leftMat);
-	free(rightMat);
-	free(resultMat);
+	free(leftMat.array);
+	free(rightMat.array);
+	free(resultMat.array);
 	free(threads);
 	free(params);
-	
 	fclose(output);
+
+	return 0;
 }
 
 void *matMult( void *param ) {
-	// hey now that I'm thinkinh about this this just might be the thing the threads use
-	//to multiply the matrix I think that it would be possible to set everything up in main
-	// in a reasonable fashion.
 	unsigned int i;
 	int result = 0;
 	pos_t *pos = (pos_t *) param;
 	
 	//sum when multiply left's row by right's col
-	for(i=0; i < leftMat->width; i++) {
-        result += MATRIX(leftMat->array, pos->row, i) * MATRIX(rightMat->array, i, pos->col);
+	for(i=0; i < leftMat.width; i++) {
+        	result += MATRIX(leftMat, pos->row, i) * MATRIX(rightMat, i, pos->col);
 	}
 	pthread_mutex_lock(&deadBolt);
-	MATRIX(resultMat, pos->row, pos->col);
+	MATRIX(resultMat, pos->row, pos->col) = result;
 	pthread_mutex_unlock(&deadBolt);
+
+	return NULL;
 }
 
 void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 	unsigned int i,j;
+	unsigned int input;
 	FILE *file = fopen(fileName, "r"); //say r as the second param because we only look to read the file
 	
 	if( file == NULL)
 	{
-		printf("There is no file by the name %s Closing program", fileName);
-		return 1;
+		printf("There is no file by the name %s Closing program\n", fileName);
+		exit(1);
 	}
 	
 	//read first two numbers height and width for first matrix
-	firstMat->height = fscanf(file, "u");
-	firstMat->width = fscanf(file, "u");
+	fscanf(file, "%u", &input);
+	firstMat->height = input;
+	fscanf(file, "%u", &input);
+	firstMat->width = input;
 	
 	//create array for matrix data
 	firstMat->array = (int*) malloc(sizeof(int) * firstMat->height * firstMat->width);
 	
 	if(firstMat->array == NULL) {
-		//bad shit happened
-		printf("Out of memory. Could not allocate Matrix.");
+		//bad stuff happened
+		printf("Out of memory. Could not allocate Matrix.\n");
 		exit(1);
 	}
 	
@@ -238,20 +244,20 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 	//loop2 for width
 		for(j=0; j < firstMat->width; j++) {
 			//store stuff in matrix struct
-			MATRIX(firstMat, i, j) = fscanf(file, "i");
+			fscanf(file, "%i", &PMATRIX(firstMat, i, j));
 		}
 	}
 	
 	//read two numbers height and width for second matrix
-	secMat->height = fscanf(file, "u");
-	secMat->width = fscanf(file, "u");
+	fscanf(file, "%u", &secMat->height);
+	fscanf(file, "%u", &secMat->width);
 	
 	//create array for matrix data
 	secMat->array = (int*) malloc(sizeof(int) * secMat->height * secMat->width);
 	
 	if(secMat->array == NULL) {
 		//bad stuff happened
-		printf("Out of memory. Could not allocate Matrix.");
+		printf("Out of memory. Could not allocate Matrix.\n");
 		//clean up
 		free(firstMat);
 		exit(1); 
@@ -262,7 +268,7 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 		//loop2 for width
 		for(j=0; j < secMat->width; j++) {
 			//store stuff in matrix struct
-			MATRIX(secMat, i, j) = fscanf(file, "i");
+			fscanf(file, "%i", &PMATRIX(secMat, i, j));
 		}
 	}
 	//close file
