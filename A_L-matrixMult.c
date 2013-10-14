@@ -53,9 +53,8 @@ matrix_t * resultMat;
 int main(int argc, char * argv[]) {
 	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
-	pthreads_t *threads
-	
-	pthread_t threads[];
+	pthreads_t * threads;
+	FILE * output;
 	
 	//init mutex
 	if (pthread_mutex_init(&deadBolt, NULL) != 0){
@@ -108,29 +107,49 @@ int main(int argc, char * argv[]) {
 		exit(1);
 	}
 	
+	//open output file
+	output = fopen("output.dat", "w");
+	
+	if( output == NULL)
+	{
+		printf("There is no file by the name %s Closing program", "output.dat");
+		//clean up
+		free(leftMat);
+		free(rightMat);
+		free(resultMat);
+		free(threads);
+		free(params);
+		exit(1);
+	}
+	
 	//print Matrices
 	//Matrix 1 (left)
-	printf("Matrix 1 [d%] X [d%]\n ", leftMat->row, leftMat->col);
-	for(i = 0; i < leftMat -> row; i++;){
-		for(j = 0; j < leftMat -> col; j++;){
-			printf("[d%] ", MATRIX(leftMat,i,j));
-			
+	printf("A[d%][d%] = {\n ", leftMat->height, leftMat->width);
+	fprintf(output, "A[d%][d%] = {\n ", leftMat->height, leftMat->width);
+	for(i = 0; i < leftMat -> height; i++;){
+		for(j = 0; j < leftMat -> width; j++;){
+			printf("\td%", MATRIX(leftMat,i,j));
+			fprintf(output, "\td%", MATRIX(leftMat,i,j));
 		}
-		printf("\n ");
+		printf("\n");
+		fprintf(output, "\n");
 	}
-	
-	printf("\n");
+	printf("}\n\n");
+	fprintf(output, "}\n\n");
 	
 	//rightMat
-	printf("Matrix 2 [d%] X [d%]\n ", rightMat->row, rightMat->col);
-	for(i = 0; i < rightMat -> row; i++;){
-		for(j = 0; j < rightMat -> col; j++;){
-			printf("[d%] ", MATRIX(rightMat,i,j));
+	printf("B[d%][d%] = {\n ", rightMat->height, rightMat->width);
+	fprintf(output, "B[d%][d%] = {\n ", rightMat->height, rightMat->width);
+	for(i = 0; i < rightMat -> height; i++;){
+		for(j = 0; j < rightMat -> width; j++;){
+			printf("\td%", MATRIX(rightMat,i,j));
+			fprintf(output, "\td%", MATRIX(rightMat,i,j));
 		}
-		printf("\n ");
+		printf("\n");
+		fprintf(output, "\n");
 	}
-	
-	k=0;
+	printf("}\n\n");
+	fprintf(output, "}\n\n");
 	
 	//create the threads
 	for(i=0; i < leftMat->height; i++) {
@@ -141,16 +160,28 @@ int main(int argc, char * argv[]) {
 		}
 	}
 	
-	
+	//wait for each thread to complete
 	for(i=0; i < leftMat->height; i++) {
 		for(j=0; j < rightMat->width; j++) {
 			pthread_join(MATRIX(threads, i, j), NULL);
 		}
 	}
 	
-	//print output
+	printf("### ALL threads have terminated\n\n");
 	
-	
+	//result matrix
+	printf("C[d%][d%] = {\n ", resultMat->height, resultMat->width);
+	fprintf(output, "C[d%][d%] = {\n ", resultMat->height, resultMat->width);
+	for(i = 0; i < resultMat -> height; i++;){
+		for(j = 0; j < resultMat -> width; j++;){
+			printf("\td%", MATRIX(resultMat,i,j));
+			fprintf(output, "\td%", MATRIX(resultMat,i,j));
+		}
+		printf("\n");
+		fprintf(output, "\n");
+	}
+	printf("}\n");
+	fprintf(output, "}\n");
 	
 	//clean up at the end
 	free(leftMat);
@@ -158,6 +189,8 @@ int main(int argc, char * argv[]) {
 	free(resultMat);
 	free(threads);
 	free(params);
+	
+	fclose(output);
 }
 
 void *matMult( void *param ) {
@@ -232,4 +265,6 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName){
 			MATRIX(secMat, i, j) = fscanf(file, "i");
 		}
 	}
+	//close file
+	fclose(file);
 }
