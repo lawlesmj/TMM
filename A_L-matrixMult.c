@@ -44,31 +44,33 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
 //mutex! for good measure
 pthread_mutex_t deadBolt;
+
 //globals
 matrix_t * leftMat;
 matrix_t * rightMat;
 matrix_t * resultMat;
 
-int main(int argc, string argv[]) {
+int main(int argc, char * argv[]) {
 	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
 	
 	pthread_t threads[];
-	
-	matIntake();
-	//prep result matrix
-	resultMat->row = leftMat->row;
-	resultMat->col = rightMat->col;
-	
-	//we are going to need a thread for every cell of the matrix if I figured this right
-	pthread_t threads[((leftMat -> rows) * (rightMat -> col))];
-	pthread_attr_t thread attrs[((leftMat -> rows) * (rightMat -> col);
 	
 	//init mutex
 	if (pthread_mutex_init(&deadBolt, NULL) != 0){
 		printf("Mutex intialization has failed");
 		exit(1);
 	}
+	
+	//read in input file
+	matIntake(leftMat, rightMat, "input.dat");
+	
+	//prep result matrix
+	resultMat->row = leftMat->row;
+	resultMat->col = rightMat->col;
+	
+	//we are going to need a thread for every cell of the matrix
+	pthread_t threads[(resultMat -> rows) * (resultMat -> col)];
 	
 	//allocate array of thread params
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
