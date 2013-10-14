@@ -35,9 +35,6 @@ typedef struct {
 typedef struct {
 	uint row;
 	uint col;
-	matrix_t *leftMatrix;
-	matrix_t *rightMatrix;
-	matrix_t *resultMatrix;
 } pos_t;
 
 //thread function prototype
@@ -47,17 +44,18 @@ void matIntake(matrix_t * firstMat, matrix_t * secMat, char * fileName);
 
 //mutex! for good measure
 pthread_mutex_t deadBolt;
+//globals
+matrix_t * leftMat;
+matrix_t * rightMat;
+matrix_t * resultMat;
 
 int main(int argc, string argv[]) {
 	unsigned int i,j,k; // k is to manage the threads
 	pos_t * params;
-	matrix_t * leftMat;
-	matrix_t * rightMat;
-	matrix_t *resultMat;
-	pthread_t threads[];
-	pthread_attr_t thread attrs[];
 	
-	matIntake(&leftMat, &rightMat);
+	pthread_t threads[];
+	
+	matIntake();
 	//prep result matrix
 	resultMat->row = leftMat->row;
 	resultMat->col = rightMat->col;
@@ -86,16 +84,6 @@ int main(int argc, string argv[]) {
 	}
 	
 	//setup params
-	params->row = 0;
-	params->col = 0;
-	params->leftMatrix = &leftMat;
-	params->rightMatrix = &rightMat;
-	params->resultMatrix = &resultMat;
-	
-	//initializing attrs
-	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
-		pthread_attr_init(&attrs[i]);
-	}
 	
 	//print Matrices
 	//Matrix 1 (left)
