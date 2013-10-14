@@ -75,21 +75,22 @@ int main(int argc, string argv[]) {
 	//allocate array of thread params
 	params = (pos_t *) malloc(sizeof(pos_t) * leftMat->rows * rightMat->cols);
 	
-	//setup params
-	params->row = 0;
-	params->col = 0;
-	params->leftMatrix = &leftMat;
-	params->rightMatrix = &rightMat;
-	params->resultMatrix = &resultMat;
-	
 	if(params == NULL) {
 		//bad things happened
 		printf("Out of memory. Could not allocate thread param array.");
 		//clean up
 		free(leftMat);
 		free(rightMat);
+		free(resultMat);
 		exit(1);
 	}
+	
+	//setup params
+	params->row = 0;
+	params->col = 0;
+	params->leftMatrix = &leftMat;
+	params->rightMatrix = &rightMat;
+	params->resultMatrix = &resultMat;
 	
 	//initializing attrs
 	for(i = 0; i < ((leftMat -> rows) * (rightMat -> col)); i++){
